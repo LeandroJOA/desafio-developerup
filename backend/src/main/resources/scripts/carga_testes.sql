@@ -3,11 +3,12 @@ CREATE SCHEMA IF NOT EXISTS H2DB AUTHORIZATION sa;
 create table H2DB.pessoa
 (
     id int not null,
+    codigo_equipe int not null,
     nome varchar(255) not null,
     sobrenome varchar(255) not null,
     contato varchar(200) not null,
-    email varchar(200) not null,
-    cargo int not null
+    email varchar(255) not null,
+    cargo int
 );
 
 create unique index pessoa_contato_uindex
@@ -24,5 +25,3 @@ alter table H2DB.pessoa
         primary key (id);
 
 alter table H2DB.pessoa modify id int auto_increment;
-
-
