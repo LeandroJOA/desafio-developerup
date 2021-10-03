@@ -1,12 +1,15 @@
 package br.com.stefanini.services;
 
 import br.com.stefanini.dao.EquipeDao;
+import br.com.stefanini.exceptions.ErroNegocialException;
 import br.com.stefanini.models.Equipe;
+import br.com.stefanini.models.Pessoa;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
+import java.util.List;
 
 /**
  * @author leandro
@@ -33,5 +36,9 @@ public class EquipeService {
         if(equipeDto.getNome() == null){
             throw new NotFoundException();
         }
+    }
+
+    public List<Equipe> listar() throws ErroNegocialException {
+        return  dao.listar();
     }
 }
