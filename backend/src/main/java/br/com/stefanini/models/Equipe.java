@@ -11,6 +11,10 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name="equipe", schema="H2DB")
+@NamedNativeQueries({
+        @NamedNativeQuery(name="INSERIR_EQUIPE", query = " INSERT INTO H2DB.equipe (nome) " +
+                "VALUES (:nome) "),
+})
 public class Equipe implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
