@@ -42,4 +42,16 @@ public class EquipeDao {
                 .createNamedQuery(nameQuery, Equipe.class);
         return query.getResultList();
     }
+
+    @Transactional
+    public Integer deletar(Integer id)  {
+        String nameQuery = "DELETAR_EQUIPE";
+
+        Query query = em
+                .createNamedQuery(nameQuery);
+
+        query.setParameter("id", id);
+
+        return query.executeUpdate();
+    }
 }
