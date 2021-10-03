@@ -1,10 +1,5 @@
 package br.com.stefanini.models;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedNativeQueries;
-import javax.persistence.NamedNativeQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -16,9 +11,9 @@ import java.io.Serializable;
 @Entity
 @Table(name="pessoa", schema="H2DB")
 @NamedNativeQueries({
-        @NamedNativeQuery(name="INSERIR_PESSOA", query = " INSERT INTO H2DB.pessoa (nome, sobrenome, contato, email, cargo) " +
-                "VALUES (:nome, :sobrenome, :contato, :email, :cargo) "),
-        @NamedNativeQuery(name="LISTAR_PESSOA", query = "select id, nome, sobrenome, contato, email, cargo from H2DB.pessoa ", resultClass = Pessoa.class),
+        @NamedNativeQuery(name="INSERIR_PESSOA", query = " INSERT INTO H2DB.pessoa (nome, sobrenome, contato, email, cargo, codigo_equipe) " +
+                "VALUES (:nome, :sobrenome, :contato, :email, :cargo, :codigo_equipe) "),
+        @NamedNativeQuery(name="LISTAR_PESSOA", query = "select id, nome, sobrenome, contato, email, cargo, codigo_equipe from H2DB.pessoa ", resultClass = Pessoa.class),
         @NamedNativeQuery(name="DELETAR_PESSOA", query = "DELETE FROM H2DB.pessoa WHERE id = :id"),
 })
 public class Pessoa implements Serializable{
@@ -40,6 +35,10 @@ public class Pessoa implements Serializable{
 
     @Column(name = "cargo")
     private int cargo;
+
+    @ManyToOne
+    @JoinColumn(name = "codigo_equipe", nullable = false)
+    private Equipe equipe;
 
     public int getId() {
         return id;
@@ -87,5 +86,13 @@ public class Pessoa implements Serializable{
 
     public void setCargo(int cargo) {
         this.cargo = cargo;
+    }
+
+    public Equipe getEquipe() {
+        return equipe;
+    }
+
+    public void setEquipe(Equipe equipe) {
+        this.equipe = equipe;
     }
 }
