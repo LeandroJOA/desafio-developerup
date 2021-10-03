@@ -49,7 +49,19 @@ public class EquipeRest {
             description = "Equipe",
             content = { @Content(mediaType = "application/json",
                     schema = @Schema(implementation = Equipe.class))})
-    public Response listarPessoa() throws ErroNegocialException {
+    public Response listarEquipe() throws ErroNegocialException {
         return  Response.status(Response.Status.OK).entity(service.listar()).build();
+    }
+    @DELETE @Path("{id}")
+    @Operation(summary = "Deletar equipe",
+            description = "Faz a validação e deleta uma equipe na base de dados")
+    @APIResponse(
+            responseCode = "200",
+            description = "Equipe",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Equipe.class))})
+    public Response deletarEquipe(@PathParam("id") Integer id) {
+        service.deletar(id);
+        return  Response.status(Response.Status.OK).build();
     }
 }
