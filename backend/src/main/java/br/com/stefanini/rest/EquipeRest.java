@@ -41,4 +41,15 @@ public class EquipeRest {
         service.inserir(equipe);
         return  Response.status(Response.Status.CREATED).build();
     }
+    @GET
+    @Operation(summary = "Listar equipes",
+            description = "Retorna uma lista de equipes sem a necessidade de parametros")
+    @APIResponse(
+            responseCode = "200",
+            description = "Equipe",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Equipe.class))})
+    public Response listarPessoa() throws ErroNegocialException {
+        return  Response.status(Response.Status.OK).entity(service.listar()).build();
+    }
 }
