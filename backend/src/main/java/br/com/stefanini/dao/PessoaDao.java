@@ -18,6 +18,7 @@ import java.util.List;
  */
 @RequestScoped
 public class PessoaDao {
+
     @PersistenceContext
     EntityManager em;
 
@@ -28,11 +29,12 @@ public class PessoaDao {
         Query query = em
                 .createNamedQuery(nameQuery);
 
-        query.setParameter("nome",pessoa.getNome());
-        query.setParameter("sobrenome",pessoa.getSobrenome());
-        query.setParameter("contato",pessoa.getContato());
+        query.setParameter("nome", pessoa.getNome());
+        query.setParameter("sobrenome", pessoa.getSobrenome());
+        query.setParameter("contato", pessoa.getContato());
         query.setParameter("email", pessoa.getEmail());
         query.setParameter("cargo", pessoa.getCargo());
+        query.setParameter("codigo_equipe", pessoa.getEquipe().getId());
 
         return query.executeUpdate();
     }
@@ -43,5 +45,16 @@ public class PessoaDao {
                 .createNamedQuery(nameQuery, Pessoa.class);
         return query.getResultList();
     }
+    
+    @Transactional
+    public int deletar(Integer id)  {
+        String nameQuery = "DELETAR_PESSOA";
 
+        Query query = em
+                .createNamedQuery(nameQuery);
+
+        query.setParameter("id", id);
+
+        return query.executeUpdate();
+    }
 }
