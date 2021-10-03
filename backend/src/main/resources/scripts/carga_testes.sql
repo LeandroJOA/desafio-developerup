@@ -2,7 +2,7 @@ CREATE SCHEMA IF NOT EXISTS H2DB AUTHORIZATION sa;
 
 create table H2DB.equipe
 (
-    id int not null,
+    id integer not null,
     nome varchar(255) not null,
 );
 
@@ -13,12 +13,12 @@ alter table H2DB.equipe
     add constraint equipe_pk
         primary key (id);
 
-alter table H2DB.equipe modify id int auto_increment;
+alter table H2DB.equipe modify id integer auto_increment;
 
 create table H2DB.pessoa
 (
-    id int not null,
-    codigo_equipe int not null,
+    id integer not null,
+    equipe int,
     nome varchar(255) not null,
     sobrenome varchar(255) not null,
     contato varchar(200) not null,
@@ -39,10 +39,10 @@ alter table H2DB.pessoa
     add constraint pessoa_pk
         primary key (id);
 
-alter table H2DB.pessoa modify id int auto_increment;
+alter table H2DB.pessoa modify id integer auto_increment;
 
 alter table H2DB.pessoa
-    add foreign key (codigo_equipe)
+    add foreign key (equipe)
         references H2DB.equipe(id);
 
 

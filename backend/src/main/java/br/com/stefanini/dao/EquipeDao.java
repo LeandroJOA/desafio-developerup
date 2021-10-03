@@ -24,7 +24,7 @@ public class EquipeDao {
     EntityManager em;
 
     @Transactional
-    public int inserir(Equipe equipe)  {
+    public Integer inserir(Equipe equipe)  {
         String nameQuery = "INSERIR_EQUIPE";
 
         Query query = em

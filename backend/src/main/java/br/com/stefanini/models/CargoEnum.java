@@ -11,10 +11,10 @@ public enum CargoEnum {
     PL(2,"Analista de Sistemas Pl."),
     SR(3,"Analista de Sistemas Sr.");
 	
-    private int codigo;
+    private Integer codigo;
     private String descricao;
 
-    CargoEnum(int codigo, String descricao) {
+    CargoEnum(Integer codigo, String descricao) {
         this.codigo = codigo;
         this.descricao = descricao;
     }

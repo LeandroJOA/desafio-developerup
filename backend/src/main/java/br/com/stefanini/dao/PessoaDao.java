@@ -23,7 +23,7 @@ public class PessoaDao {
     EntityManager em;
 
     @Transactional
-    public int inserir(Pessoa pessoa)  {
+    public Integer inserir(Pessoa pessoa)  {
         String nameQuery = "INSERIR_PESSOA";
 
         Query query = em
@@ -34,7 +34,7 @@ public class PessoaDao {
         query.setParameter("contato", pessoa.getContato());
         query.setParameter("email", pessoa.getEmail());
         query.setParameter("cargo", pessoa.getCargo());
-        query.setParameter("codigo_equipe", pessoa.getEquipe().getId());
+        query.setParameter("equipe", pessoa.getEquipe());
 
         return query.executeUpdate();
     }
@@ -47,7 +47,7 @@ public class PessoaDao {
     }
     
     @Transactional
-    public int deletar(Integer id)  {
+    public Integer deletar(Integer id)  {
         String nameQuery = "DELETAR_PESSOA";
 
         Query query = em

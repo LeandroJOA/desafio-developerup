@@ -11,15 +11,15 @@ import java.io.Serializable;
 @Entity
 @Table(name="pessoa", schema="H2DB")
 @NamedNativeQueries({
-        @NamedNativeQuery(name="INSERIR_PESSOA", query = " INSERT INTO H2DB.pessoa (nome, sobrenome, contato, email, cargo, codigo_equipe) " +
-                "VALUES (:nome, :sobrenome, :contato, :email, :cargo, :codigo_equipe) "),
-        @NamedNativeQuery(name="LISTAR_PESSOA", query = "select id, nome, sobrenome, contato, email, cargo, codigo_equipe from H2DB.pessoa ", resultClass = Pessoa.class),
+        @NamedNativeQuery(name="INSERIR_PESSOA", query = " INSERT INTO H2DB.pessoa (nome, sobrenome, contato, email, cargo, equipe) " +
+                "VALUES (:nome, :sobrenome, :contato, :email, :cargo, :equipe) "),
+        @NamedNativeQuery(name="LISTAR_PESSOA", query = "SELECT id, nome, sobrenome, contato, email, cargo, equipe FROM H2DB.pessoa ", resultClass = Pessoa.class),
         @NamedNativeQuery(name="DELETAR_PESSOA", query = "DELETE FROM H2DB.pessoa WHERE id = :id"),
 })
 public class Pessoa implements Serializable{
 	@Id
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "nome", nullable = false)
     private String nome;
@@ -34,17 +34,17 @@ public class Pessoa implements Serializable{
     private String email;
 
     @Column(name = "cargo")
-    private int cargo;
+    private Integer cargo;
 
     @ManyToOne
-    @JoinColumn(name = "codigo_equipe", nullable = false)
+    @JoinColumn(name = "equipe")
     private Equipe equipe;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -80,11 +80,11 @@ public class Pessoa implements Serializable{
         this.email = email;
     }
 
-    public int getCargo() {
+    public Integer getCargo() {
         return cargo;
     }
 
-    public void setCargo(int cargo) {
+    public void setCargo(Integer cargo) {
         this.cargo = cargo;
     }
 
