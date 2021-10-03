@@ -41,4 +41,9 @@ public class EquipeService {
     public List<Equipe> listar() throws ErroNegocialException {
         return  dao.listar();
     }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void deletar(Integer id) {
+        dao.deletar(id);
+    }
 }
