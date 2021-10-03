@@ -1,7 +1,6 @@
 package br.com.stefanini.services;
 
 import br.com.stefanini.dao.PessoaDao;
-import br.com.stefanini.exceptions.EnumMensagens;
 import br.com.stefanini.exceptions.ErroNegocialException;
 import br.com.stefanini.models.Pessoa;
 
@@ -9,9 +8,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.NotFoundException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author danilo
@@ -21,7 +18,6 @@ import java.util.stream.Collectors;
  */
 @RequestScoped
 public class PessoaService {
-
 
     @Inject
     PessoaDao dao;
@@ -35,15 +31,14 @@ public class PessoaService {
 
 
     public List<Pessoa> listar() throws ErroNegocialException {
-        throw new ErroNegocialException(EnumMensagens.ERRO_SQL);
-//        return  dao.listar();
+        return  dao.listar();
     }
 
     private void validar(Pessoa pessoaDto) throws NotFoundException{
         if(pessoaDto == null){
             throw new NotFoundException();
         }
-        if(pessoaDto.getNome() == null ||  pessoaDto.getSobrenome() == null){
+        if(pessoaDto.getNome() == null &&  pessoaDto.getSobrenome() == null){
             throw new NotFoundException();
         }
         if(pessoaDto.getEmail() == null ){
@@ -52,11 +47,8 @@ public class PessoaService {
         if(pessoaDto.getContato() == null ){
             throw new NotFoundException();
         }
-        if(pessoaDto.getCargo() == 0 ){
-            throw new NotFoundException();
-        }
-
     }
+
     private void validaEmailDuplicado(String email){
         System.out.println(email);
     }
