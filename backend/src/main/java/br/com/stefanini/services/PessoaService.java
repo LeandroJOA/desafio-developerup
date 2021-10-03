@@ -52,4 +52,9 @@ public class PessoaService {
     private void validaEmailDuplicado(String email){
         System.out.println(email);
     }
+    
+    @Transactional(rollbackOn = Exception.class)
+    public void deletar(Integer id) {
+        dao.deletar(id);
+    }
 }
