@@ -29,11 +29,6 @@ public class PessoaService {
         dao.inserir(pessoaDto);
     }
 
-
-    public List<Pessoa> listar() throws ErroNegocialException {
-        return  dao.listar();
-    }
-
     private void validar(Pessoa pessoaDto) throws NotFoundException{
         if(pessoaDto == null){
             throw new NotFoundException();
@@ -51,6 +46,10 @@ public class PessoaService {
 
     private void validaEmailDuplicado(String email){
         System.out.println(email);
+    }
+
+    public List<Pessoa> listar() throws ErroNegocialException {
+        return  dao.listar();
     }
     
     @Transactional(rollbackOn = Exception.class)
