@@ -11,9 +11,11 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -29,11 +31,12 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class PessoaRest {
+
     @Inject
     PessoaService service;
     @POST
-    @Operation(summary = "Insere uma pessoa",
-            description = "Com os dados faz a validação e insereção na base de dados")
+    @Operation(summary = "Inserir pessoa",
+            description = "Com os dados faz a validação e inserção na base de dados")
     @APIResponse(
             responseCode = "201",
             description = "Pessoa",
@@ -44,7 +47,7 @@ public class PessoaRest {
         return  Response.status(Response.Status.CREATED).build();
     }
     @GET
-    @Operation(summary = "Listar Pessoas",
+    @Operation(summary = "Listar pessoas",
             description = "Retorna uma lista de pessoas sem a necessidade de parametros")
     @APIResponse(
             responseCode = "200",
@@ -53,5 +56,17 @@ public class PessoaRest {
                     schema = @Schema(implementation = Pessoa.class))})
     public Response listarPessoa() throws ErroNegocialException {
         return  Response.status(Response.Status.OK).entity(service.listar()).build();
+    }
+    @DELETE @Path("{id}")
+    @Operation(summary = "Deletar pessoa",
+    		description = "Faz a validação e deleta uma pessoa na base de dados")
+    @APIResponse(
+    		responseCode = "200",
+    		description = "Pessoa",
+    		content = { @Content(mediaType = "application/json",
+            	schema = @Schema(implementation = Pessoa.class))})
+    public Response deletarPessoa(@PathParam("id") Integer id) {
+    	service.deletar(id);
+    	return  Response.status(Response.Status.OK).build();
     }
 }
