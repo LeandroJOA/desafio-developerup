@@ -10,6 +10,8 @@ import { Router } from '@angular/router';
 })
 export class ListaProfissionalComponent implements OnInit {
 
+  mensagemError: string = ""
+  error: boolean = false
   prod: any
   pessoas: Array<Pessoa> = []
   carregarLoading: boolean = false
@@ -17,15 +19,21 @@ export class ListaProfissionalComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.cadastroService.listar().subscribe(p =>{
-      setTimeout(() =>{
-        this.carregarLoading  = true
-        this.pessoas = p
-      },2000)
-    }) 
+    this.cadastroService.listar().subscribe(
+      p => {
+        setTimeout(() => {
+          this.carregarLoading  = true
+          this.pessoas = p
+        }, 2000)
+      },
+      error => {
+        this.mensagemError = error.error
+        this.error = true
+      }
+    ) 
   }
 
-  associarCargo(cargo: number){
+  associarCargo(cargo: any){
     if(cargo == 1){
         return "Analista de Sistemas Jr.";
     }else if(cargo == 2){
@@ -34,16 +42,22 @@ export class ListaProfissionalComponent implements OnInit {
         return "Analista de Sistemas Sr.";
     }
     return ''
-    
 }
 
   excluirItem = (id: any) =>{
-    this.cadastroService.excluirItem(id).subscribe(
-      success => this.ngOnInit(),
-      error => alert("Algo deu errado na transação"),
-      () => console.log('Requisição completa')
+    if(window.confirm('Deseja excluir este profissional?')){
+      this.cadastroService.excluirItem(id).subscribe(
+        success => {
+          this.ngOnInit()
+        },
+        error => {
+          this.mensagemError = error.error
+          this.error = true
+        },
+        () => console.log('Requisição completa')
       )
       //this.ngOnInit();
+    }
   }
 
   editar = (id:any) =>{

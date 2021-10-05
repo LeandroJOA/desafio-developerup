@@ -1,3 +1,4 @@
+import { Equipe } from './equipe';
 export class Pessoa {
 
     // constructor(public id: number, public nome: string, public email: string, public cargo: number ){
@@ -8,7 +9,8 @@ export class Pessoa {
     public sobrenome: string = '';
     public contato: string = '';
     public email: string = '';
-    public cargo: number = 1;
+    public cargo?: number = 1;
+    public equipe?: Equipe = new Equipe;
 
     
 }

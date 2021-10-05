@@ -1,0 +1,35 @@
+<div class="alert alert-danger d-flex align-items-center" role="alert" *ngIf="error">
+    <div>{{mensagemError}}</div>
+</div>
+<button type="button" class="btn btn-success" (click)="navegar()">Nova Equipe</button>
+<table class="table table-striped" *ngIf="carregarLoading; else carregando">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col" style="width: 5px;">Editar</th>
+            <th scope="col" style="width: 5px;">Excluir</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let e of equipes">
+            <th scope="row">{{e.id}}</th>
+            <td class="ellipsis">{{e.nome}}</td>
+            <td> <button type="button" class="btn btn-warning" (click)="editar(e.id)">Editar</button> </td>
+            <td> <button type="button" class="btn btn-danger" (click)="excluirItem(e.id)">Excluir</button> </td>
+        </tr>
+    </tbody>
+</table>
+
+<ng-template #carregando>
+    <div id="preloader">
+        <div class="inner">
+            carregando...
+            <div class="bolas">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+</ng-template>

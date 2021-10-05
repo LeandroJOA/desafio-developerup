@@ -1,4 +1,6 @@
-
+<div class="alert alert-danger d-flex align-items-center" role="alert" *ngIf="error">
+  <div>{{mensagemError}}</div>
+</div>
 <button type="button" class="btn btn-success" (click)="navegar()">Novo Profissional</button>
 <table class="table table-striped" *ngIf="carregarLoading; else carregando">
     <thead>
@@ -9,18 +11,18 @@
         <th scope="col">Email</th>
         <th scope="col">Contato</th>
         <th scope="col">Cargo</th>
-        <th scope="col">Editar</th>
-        <th scope="col">Excluir</th>
+        <th scope="col" style="width: 5px;">Editar</th>
+        <th scope="col" style="width: 5px;">Excluir</th>
       </tr>
     </thead>
     <tbody>
       <tr  *ngFor="let p of pessoas">
         <th scope="row">{{p.id}}</th>
-        <td>{{p.nome }}</td>
-        <td>{{p.sobrenome }}</td>
-        <td>{{p.email }}</td>
-        <td>{{p.contato }}</td>
-        <td>{{associarCargo(p.cargo)}}</td>
+        <td class="ellipsis">{{p.nome }}</td>
+        <td class="ellipsis">{{p.sobrenome }}</td>
+        <td class="ellipsis">{{p.email }}</td>
+        <td class="ellipsis">{{p.contato }}</td>
+        <td class="ellipsis">{{associarCargo(p.cargo) }}</td>
         <td> <button type="button" class="btn btn-warning" (click)="editar(p.id)" >Editar</button> </td>
         <td> <button type="button" class="btn btn-danger" (click)="excluirItem(p.id)" >Excluir</button> </td>
       </tr>
