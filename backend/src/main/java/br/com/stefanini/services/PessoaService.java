@@ -1,7 +1,6 @@
 package br.com.stefanini.services;
 
 import br.com.stefanini.dao.PessoaDao;
-import br.com.stefanini.exceptions.ErroNegocialException;
 import br.com.stefanini.models.Pessoa;
 
 import javax.enterprise.context.RequestScoped;
@@ -23,37 +22,58 @@ public class PessoaService {
     PessoaDao dao;
 
     @Transactional(rollbackOn = Exception.class)
-    public void inserir(Pessoa pessoaDto) {
-        this.validar(pessoaDto);
-        this.validaEmailDuplicado(pessoaDto.getEmail());
+    public void inserir(Pessoa pessoaDto) throws Exception {
+        this.validar(pessoaDto, "POST");
         dao.inserir(pessoaDto);
     }
 
-    private void validar(Pessoa pessoaDto) throws NotFoundException{
-        if(pessoaDto == null){
-            throw new NotFoundException();
-        }
-        if(pessoaDto.getNome() == null &&  pessoaDto.getSobrenome() == null){
-            throw new NotFoundException();
-        }
-        if(pessoaDto.getEmail() == null ){
-            throw new NotFoundException();
-        }
-        if(pessoaDto.getContato() == null ){
-            throw new NotFoundException();
-        }
+    public List<Pessoa> listar() throws Exception {
+        return dao.listar();
     }
 
-    private void validaEmailDuplicado(String email){
-        System.out.println(email);
-    }
-
-    public List<Pessoa> listar() throws ErroNegocialException {
-        return  dao.listar();
+    public Pessoa listarUm(Integer id) throws Exception {
+        return dao.listarUm(id);
     }
     
     @Transactional(rollbackOn = Exception.class)
-    public void deletar(Integer id) {
-        dao.deletar(id);
+    public void deletar(Integer id) throws Exception {
+        Pessoa pessoa = listarUm(id);
+
+        if (pessoa.getEquipe() == null) {
+            Integer delete = dao.deletar(id);
+
+            if (delete == 0) {
+                throw new NotFoundException();
+            }
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public void atualizar(Integer id, Pessoa pessoaDto) throws Exception {
+        this.validar(pessoaDto, "PUT");
+        Integer put = dao.atualizar(id, pessoaDto);
+
+        if (put == 0) {
+            throw new NotFoundException();
+        }
+    }
+
+    private void validar(Pessoa pessoaDto, String metodo) throws NotFoundException{
+        if(pessoaDto == null){
+            throw new IllegalArgumentException();
+        }
+        if(pessoaDto.getEmail() == null ){
+            throw new IllegalArgumentException();
+        }
+        if(pessoaDto.getContato() == null ){
+            throw new IllegalArgumentException();
+        }
+        if (metodo == "POST") {
+            if(pessoaDto.getNome() == null || pessoaDto.getSobrenome() == null){
+                throw new IllegalArgumentException();
+            }
+        }
     }
 }

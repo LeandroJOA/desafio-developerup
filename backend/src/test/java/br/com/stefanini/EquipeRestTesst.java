@@ -1,27 +1,27 @@
 package br.com.stefanini;
 
-import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.ContentType;
-import io.vertx.core.json.JsonObject;
-import org.junit.jupiter.api.Test;
-
-import br.com.stefanini.models.Equipe;
-
 import static io.restassured.RestAssured.given;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
+import org.junit.jupiter.api.Test;
+
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
+import io.vertx.core.json.JsonObject;
+
 /**
- * @author danilo
+ * @author leandro
  * @version 0.1.0
- * @email maratona@stefanini.com
- * @created 23/09/2021 on 20:24
+ * @email leandrojoapi@gmail.com
+ * @created 04/10/2021 on 22:26
  */
 @QuarkusTest
-public class PessoaRestTest {
-    private final static String URL = "/pessoa";
+public class EquipeRestTesst {
+
+	private final static String URL = "/equipe";
 
     @Test
-    public void listarPessoaSucessoTest(){
+    public void listarEquipeSucessoTest(){
         given()
                 .contentType(ContentType.JSON)
                 .when().body("")
@@ -31,8 +31,8 @@ public class PessoaRestTest {
                 .body(matchesJsonSchemaInClasspath("schemas/JsonSchemaLista.json"));
     }
     @Test
-    public void listarUmPessoaSucessoTest(){
-    	String URL = "/pessoa/3";
+    public void listarUmEquipeSucessoTest(){
+    	String URL = "/equipe/1";
     	
         given()
                 .contentType(ContentType.JSON)
@@ -43,8 +43,8 @@ public class PessoaRestTest {
                 .body(matchesJsonSchemaInClasspath("schemas/JsonSchemaLista.json"));
     }
     @Test
-    public void listarUmPessoaInvalidIDTest(){
-    	String URL = "/pessoa/999";
+    public void listarUmEquipeInvalidIDTest(){
+    	String URL = "/equipe/teste";
     	
     	given()
     	.contentType(ContentType.JSON)
@@ -54,13 +54,9 @@ public class PessoaRestTest {
     	.statusCode(404);
     }
     @Test
-    public void inserirPessoaSucessoTest(){
+    public void inserirEquipeSucessoTest(){
     	JsonObject bodyJson = new JsonObject();
-    	bodyJson.put("cargo", 1);
-        bodyJson.put("contato", "string");
-        bodyJson.put("email", "string");
         bodyJson.put("nome", "string");
-        bodyJson.put("sobrenome", "string");
         String body = bodyJson.toString();
         
         given()
@@ -71,12 +67,8 @@ public class PessoaRestTest {
                 .statusCode(201);
     }
     @Test
-    public void inserirPessoaInvalidBodyTest(){
+    public void inserirEquipeInvalidBodyTest(){
     	JsonObject bodyJson = new JsonObject();
-    	bodyJson.put("cargo", 1);
-        bodyJson.put("contato", "string");
-        bodyJson.put("email", "string");
-        bodyJson.put("nome", "string");
         String body = bodyJson.toString();
         
         given()
@@ -87,8 +79,8 @@ public class PessoaRestTest {
                 .statusCode(400);
     }
     @Test
-    public void deletarPessoaSucessoTest(){
-    	String URL = "/pessoa/1";
+    public void deletarEquipeSucessoTest(){
+    	String URL = "/equipe/1";
     	
         given()
                 .contentType(ContentType.JSON)
@@ -98,8 +90,8 @@ public class PessoaRestTest {
                 .statusCode(200);
     }
     @Test
-    public void deletarPessoaInvalidIDTest(){
-    	String URL = "/pessoa/teste";
+    public void deletarEquipeInvalidIDTest(){
+    	String URL = "/equipe/teste";
     	
         given()
                 .contentType(ContentType.JSON)
@@ -109,13 +101,11 @@ public class PessoaRestTest {
                 .statusCode(404);
     }
     @Test
-    public void atualizarPessoaSucessoTest(){
-    	String URL = "/pessoa/1";
+    public void atualizarEquipeSucessoTest(){
+    	String URL = "/equipe/1";
     	
     	JsonObject bodyJson = new JsonObject();
-    	bodyJson.put("cargo", 0);
-        bodyJson.put("contato", "string2");
-        bodyJson.put("email", "string2");
+    	bodyJson.put("nome", "string2");
         String body = bodyJson.toString();
     	
         given()
@@ -126,13 +116,11 @@ public class PessoaRestTest {
                 .statusCode(200);
     }
     @Test
-    public void atualizarPessoaInvalidIDTest(){
-    	String URL = "/pessoa/teste";
+    public void atualizarEquipeInvalidIDTest(){
+    	String URL = "/equipe/teste";
     	
     	JsonObject bodyJson = new JsonObject();
-    	bodyJson.put("cargo", 0);
-        bodyJson.put("contato", "string2");
-        bodyJson.put("email", "string2");
+    	bodyJson.put("nome", "string2");
         String body = bodyJson.toString();
     	
         given()
@@ -143,11 +131,11 @@ public class PessoaRestTest {
                 .statusCode(404);
     }
     @Test
-    public void atualizarPessoaInvalidBodyTest(){
-    	String URL = "/pessoa/1";
+    public void atualizarEquipeInvalidBodyTest(){
+    	String URL = "/equipe/1";
     	
     	JsonObject bodyJson = new JsonObject();
-    	bodyJson.put("nome", 1);
+    	bodyJson.put("cargo", 0);
         String body = bodyJson.toString();
     	
         given()

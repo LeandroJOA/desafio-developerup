@@ -1,6 +1,5 @@
 package br.com.stefanini.rest;
 
-import br.com.stefanini.exceptions.ErroNegocialException;
 import br.com.stefanini.models.Pessoa;
 import br.com.stefanini.services.PessoaService;
 import org.eclipse.microprofile.openapi.annotations.Operation;
@@ -10,13 +9,8 @@ import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.persistence.NoResultException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -42,9 +36,20 @@ public class PessoaRest {
             description = "Pessoa",
             content = { @Content(mediaType = "application/json",
                     schema = @Schema(implementation = Pessoa.class))})
-    public Response inserirPessoa(Pessoa pessoa) throws Exception {
-        service.inserir(pessoa);
-        return  Response.status(Response.Status.CREATED).build();
+    public Response inserirPessoa(Pessoa pessoa) {
+        try {
+            service.inserir(pessoa);
+            return  Response.status(Response.Status.CREATED).build();
+        } catch (IllegalArgumentException error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).entity("ERROR ao inserir! Campos Nome, Sobrenome, E-Mail e Contato são obrigatorios!").build();
+        } catch (RuntimeException error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).entity("ERROR ao inserir! Email ou Contato já cadastrado!").build();
+        } catch (Exception error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR ao inserir! Problema no servidor!").build();
+        }
     }
     @GET
     @Operation(summary = "Listar pessoas",
@@ -54,8 +59,32 @@ public class PessoaRest {
             description = "Pessoa",
             content = { @Content(mediaType = "application/json",
                     schema = @Schema(implementation = Pessoa.class))})
-    public Response listarPessoa() throws ErroNegocialException {
-        return  Response.status(Response.Status.OK).entity(service.listar()).build();
+    public Response listarPessoa() {
+        try {
+            return  Response.status(Response.Status.OK).entity(service.listar()).build();
+        } catch (Exception error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR ao listar! Problema no servidor!").build();
+        }
+    }
+    @GET @Path("{id}")
+    @Operation(summary = "Listar uma pessoa",
+            description = "Retorna uma pessoa a partir do ID")
+    @APIResponse(
+            responseCode = "200",
+            description = "Pessoa",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Pessoa.class))})
+    public Response listarUmPessoa(@PathParam("id") Integer id) {
+        try {
+            return  Response.status(Response.Status.OK).entity(service.listarUm(id)).build();
+        } catch (NoResultException error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.NOT_FOUND).entity("ERROR ao buscar! ID não encontrado!").build();
+        } catch (Exception error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR ao buscar! Problema no servidor!").build();
+        }
     }
     @DELETE @Path("{id}")
     @Operation(summary = "Deletar pessoa",
@@ -66,7 +95,45 @@ public class PessoaRest {
     		content = { @Content(mediaType = "application/json",
             	schema = @Schema(implementation = Pessoa.class))})
     public Response deletarPessoa(@PathParam("id") Integer id) {
-    	service.deletar(id);
-    	return  Response.status(Response.Status.OK).build();
+        try {
+            service.deletar(id);
+            return  Response.status(Response.Status.OK).build();
+        } catch (NotFoundException error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.NOT_FOUND).entity("ERROR ao deletar! ID não encontrado!").build();
+        } catch (RuntimeException error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.CONFLICT).entity("ERROR ao deletar! Não é possivel excluir um funcionario enquanto associado à uma equipe!").build();
+        } catch (Exception error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR ao deletar! Problema no servidor!").build();
+        }
+    }
+    @PUT
+    @Path("{id}")
+    @Operation(summary = "Atualizar pessoa",
+            description = "Faz a validação e atualiza uma pessoa na base de dados")
+    @APIResponse(
+            responseCode = "200",
+            description = "Pessoa",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Pessoa.class))})
+    public Response atualizarPessoa(@PathParam("id") Integer id, Pessoa pessoa) {
+        try {
+            service.atualizar(id, pessoa);
+            return  Response.status(Response.Status.OK).build();
+        } catch (NotFoundException error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.NOT_FOUND).entity("ERROR ao atualizar! ID não encontrado!").build();
+        } catch (IllegalArgumentException error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).entity("ERROR ao atualizar! Campos E-Mail e Contato são obrigatorios!").build();
+        } catch (RuntimeException error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST).entity("ERROR ao atualizar! Email ou Contato já cadastrado!").build();
+        } catch (Exception error) {
+            error.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("ERROR ao atualizar! Problema no servidor!").build();
+        }
     }
 }

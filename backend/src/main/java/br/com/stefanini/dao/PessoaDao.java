@@ -23,7 +23,7 @@ public class PessoaDao {
     EntityManager em;
 
     @Transactional
-    public Integer inserir(Pessoa pessoa)  {
+    public Integer inserir(Pessoa pessoa) throws Exception {
         String nameQuery = "INSERIR_PESSOA";
 
         Query query = em
@@ -39,21 +39,49 @@ public class PessoaDao {
         return query.executeUpdate();
     }
 
-    public List<Pessoa> listar()  {
+    public List<Pessoa> listar() throws Exception {
         String nameQuery = "LISTAR_PESSOA";
         TypedQuery<Pessoa> query = em
                 .createNamedQuery(nameQuery, Pessoa.class);
         return query.getResultList();
+
+    }
+
+    public Pessoa listarUm(Integer id) throws Exception {
+        String nameQuery = "LISTARUM_PESSOA";
+
+        TypedQuery<Pessoa> query = em
+                .createNamedQuery(nameQuery, Pessoa.class);
+
+        query.setParameter("id", id);
+
+        return query.getSingleResult();
     }
     
     @Transactional
-    public Integer deletar(Integer id)  {
+    public Integer deletar(Integer id) throws Exception {
         String nameQuery = "DELETAR_PESSOA";
 
         Query query = em
                 .createNamedQuery(nameQuery);
 
         query.setParameter("id", id);
+
+        return query.executeUpdate();
+    }
+
+    @Transactional
+    public Integer atualizar(Integer id, Pessoa Pessoa) throws Exception {
+        String nameQuery = "ATUALIZAR_PESSOA";
+
+        Query query = em
+                .createNamedQuery(nameQuery);
+
+        query.setParameter("id", id);
+        query.setParameter("contato", Pessoa.getContato());
+        query.setParameter("email", Pessoa.getEmail());
+        query.setParameter("cargo", Pessoa.getCargo());
+        query.setParameter("equipe", Pessoa.getEquipe());
 
         return query.executeUpdate();
     }

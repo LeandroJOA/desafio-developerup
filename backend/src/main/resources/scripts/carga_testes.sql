@@ -18,12 +18,12 @@ alter table H2DB.equipe modify id integer auto_increment;
 create table H2DB.pessoa
 (
     id integer not null,
-    equipe int,
+    equipe integer,
     nome varchar(255) not null,
     sobrenome varchar(255) not null,
     contato varchar(200) not null,
     email varchar(255) not null,
-    cargo int
+    cargo integer
 );
 
 create unique index pessoa_contato_uindex

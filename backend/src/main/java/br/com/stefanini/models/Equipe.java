@@ -15,7 +15,9 @@ import java.io.Serializable;
         @NamedNativeQuery(name="INSERIR_EQUIPE", query = " INSERT INTO H2DB.equipe (nome) " +
                 "VALUES (:nome) "),
         @NamedNativeQuery(name="LISTAR_EQUIPE", query = "SELECT id, nome FROM H2DB.equipe ", resultClass = Equipe.class),
+        @NamedNativeQuery(name="LISTARUM_EQUIPE", query = "SELECT id, nome FROM H2DB.equipe WHERE id = :id", resultClass = Equipe.class),
         @NamedNativeQuery(name="DELETAR_EQUIPE", query = "DELETE FROM H2DB.equipe WHERE id = :id"),
+        @NamedNativeQuery(name="ATUALIZAR_EQUIPE", query = "UPDATE H2DB.equipe SET nome = :nome WHERE id = :id"),
 })
 public class Equipe implements Serializable {
     @Id

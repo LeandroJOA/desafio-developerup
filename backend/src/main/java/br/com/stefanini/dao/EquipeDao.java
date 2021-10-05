@@ -1,7 +1,6 @@
 package br.com.stefanini.dao;
 
 import br.com.stefanini.models.Equipe;
-import br.com.stefanini.models.Pessoa;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
@@ -24,7 +23,7 @@ public class EquipeDao {
     EntityManager em;
 
     @Transactional
-    public Integer inserir(Equipe equipe)  {
+    public Integer inserir(Equipe equipe) throws Exception {
         String nameQuery = "INSERIR_EQUIPE";
 
         Query query = em
@@ -35,7 +34,7 @@ public class EquipeDao {
         return query.executeUpdate();
     }
 
-    public List<Equipe> listar()  {
+    public List<Equipe> listar() throws Exception {
         String nameQuery = "LISTAR_EQUIPE";
 
         TypedQuery<Equipe> query = em
@@ -43,14 +42,38 @@ public class EquipeDao {
         return query.getResultList();
     }
 
+    public Equipe listarUm(Integer id) throws Exception {
+        String nameQuery = "LISTARUM_EQUIPE";
+
+        TypedQuery<Equipe> query = em
+                .createNamedQuery(nameQuery, Equipe.class);
+
+        query.setParameter("id", id);
+
+        return query.getSingleResult();
+    }
+
     @Transactional
-    public Integer deletar(Integer id)  {
+    public Integer deletar(Integer id) throws Exception {
         String nameQuery = "DELETAR_EQUIPE";
 
         Query query = em
                 .createNamedQuery(nameQuery);
 
         query.setParameter("id", id);
+
+        return query.executeUpdate();
+    }
+
+    @Transactional
+    public Integer atualizar(Integer id, Equipe novaEquipe) throws Exception {
+        String nameQuery = "ATUALIZAR_EQUIPE";
+
+        Query query = em
+                .createNamedQuery(nameQuery);
+
+        query.setParameter("id", id);
+        query.setParameter("nome", novaEquipe.getNome());
 
         return query.executeUpdate();
     }
